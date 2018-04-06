@@ -1,0 +1,60 @@
+<% if current_user.auth == 2 %>
+  <% @users.each do |user| %>
+    <div class="section">
+      <div class="users-grid">
+        <div class="row">
+          <h4>Table: <%=user[:email]%>:</h4>
+          <% if user.dishes.length > 0 %>
+            <p><%= link_to "<button style='width:50%' class='waves-effect waves-light btn'>Delete order</button>".html_safe, user_path(user[:id]), method: :delete %></p>
+            <div class="col s4 l4 m4 places-holder">
+              <% user.dishes.each do |dish| %>
+                <div class="card hoverable blue-grey lighten-4">
+                  <p><%=dish[:name]%></p>
+                  <%= link_to "<button style='width:50%' class='waves-effect waves-light btn'>Delete dish</button>".html_safe, user_dish_path(dish.id), method: :delete %><br>
+                </div>
+              <% end %>
+            </div>
+          <% else %>
+            <p>This table hasn't ordered yet!</p>
+          <% end %>
+
+          <% if user.ingredients.length > 0 %>
+            <strong>Alergies:</strong>
+            <% user.ingredients.each do |ingredient| %>
+              <div style='width:50%' class="card hoverable blue-grey lighten-4 right">
+                <p><%=ingredient[:name]%></p>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% else %>
+  <% if current_user.dishes.length > 0 %>
+    <div class="section">
+      <div class="users-grid">
+        <div class="row">
+          <% current_user.dishes.each do |dish| %>
+            <div class="card hoverable blue-grey lighten-4">
+              <p><%=dish[:name]%></p>
+              <%= link_to "<button style='width:50%' class='waves-effect waves-light btn'>Remove from your order</button>", user_dish_path(dish.id), method: :delete %><br>
+            </div>
+          <% end %>
+        </div>
+        <div class="row">
+          <% if current_user.ingredients.length > 0 %>
+            <strong>Alergies:</strong>
+            <% current_user.ingredients.each do |ingredient| %>
+              <div style='width:50%' class="card hoverable blue-grey lighten-4 right">
+              <p><%=ingredient[:name]%></p>
+            </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% else %>
+      <h4>Get ordering!</h4>
+    <% end %>
+  <% end %>
+<% end %>
